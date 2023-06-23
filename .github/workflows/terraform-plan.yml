@@ -20,41 +20,41 @@ jobs:
           aws-region: eu-west-2
 
       - name: Setup Terraform
-          uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v2
 
       - name: Terraform Init
         with:
           tf_actions_subcommand: 'init'
           tf_actions_working_dir: 'aws'
 
-        - name: Terraform validate
-          run: terraform validate
+      - name: Terraform validate
+        run: terraform validate
 
 
-        - name: Terraform Plan
-          run: terraform plan
+      - name: Terraform Plan
+        run: terraform plan
 
   azure:
     runs-on: ubuntu-latest
 
     steps:
-        - uses: actions/checkout@v3
-        - name: Log in with Azure
-          uses: azure/login@v1
+      - uses: actions/checkout@v3
+      - name: Log in with Azure
+        uses: azure/login@v1
+         with:
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Init
           with:
-            creds: '${{ secrets.AZURE_CREDENTIALS }}'
-
-        - name: Setup Terraform
-          uses: hashicorp/setup-terraform@v2
-
-        - name: Terraform Init
-            with:
-              tf_actions_subcommand: 'init'
-              tf_actions_working_dir: 'azure'
+            tf_actions_subcommand: 'init'
+            tf_actions_working_dir: 'azure'
 
 
-        - name: Terraform validate
-          run: terraform validate
+      - name: Terraform validate
+        run: terraform validate
 
 
         - name: Terraform Plan
