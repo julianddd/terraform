@@ -47,9 +47,9 @@ jobs:
           creds: '${{ secrets.AZURE_CREDENTIALS }}'
 
       - name: Set working directory
-          run:
-            working-directory: 'aws'
-            
+        run:
+          working-directory: 'aws'
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
 
