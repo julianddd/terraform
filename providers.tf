@@ -1,5 +1,9 @@
 terraform {
   required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.0"
+    }
 
     azurerm = {
       source = "hashicorp/azurerm"
@@ -10,6 +14,12 @@ terraform {
 
   }
 }
+
+
+# Configure the AWS Provider
+provider "aws" {
+  region  = "eu-west-2"
+  }
 
 provider "azurerm" {
   features {}
