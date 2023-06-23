@@ -43,16 +43,29 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Log in with Azure
-        uses: azure/login@v1
-        with:
-          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+
+ #     - name: Log in with Azure
+ #       uses: azure/login@v1
+ #       with:
+ #         creds: '${{ secrets.AZURE_CREDENTIALS }}'
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
 
       - name: Terraform Init
-        run: terraform init
+        run: |
+          export ARM_CLIENT_ID=$ARM_CLIENT_ID
+          export ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET
+          export ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID
+          export ARM_TENANT_ID=$ARM_TENANT_ID
+
+          terraform init
+        env:
+          ARM_SUBSCRIPTION_ID   = "f5312eb0-6e23-44ef-9779-ab78927a6631"
+          ARM_TENANT_ID         = "388ad191-4548-475f-8b4c-58433b083db8"
+          ARM_CLIENT_ID         = "3d4172b8-6c29-4234-8296-4fc33c7fa73a"
+          ARM_CLIENT_SECRET     = "secrets.AZURE_SECRET"
+
 
 
       - name: Terraform validate
