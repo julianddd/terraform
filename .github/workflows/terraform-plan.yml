@@ -19,14 +19,15 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-2
 
+      - name: Set working directory
+        run:
+          working-directory: 'aws'
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
 
       - name: Terraform Init
-        uses: hashicorp/terraform-github-actions@master
-        with:
-          tf_actions_subcommand: 'init'
-          tf_actions_working_dir: 'aws'
+        run: terraform init
 
       - name: Terraform validate
         run: terraform validate
@@ -45,6 +46,10 @@ jobs:
         with:
           creds: '${{ secrets.AZURE_CREDENTIALS }}'
 
+      - name: Set working directory
+          run:
+            working-directory: 'aws'
+            
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
 
