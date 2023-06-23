@@ -6,7 +6,7 @@ on:
     branches-ignore: [ main ]
 
 jobs:
-  terraform:
+  aws:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,23 +17,45 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-2
-
-      - name: Log in with Azure
-        uses: azure/login@v1
-        with:
-          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+          aws-region: eu-west-2
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+          uses: hashicorp/setup-terraform@v2
 
-      - name: Terraform init -input=false
-        run: terraform init
+      - name: Terraform Init
+        with:
+          tf_actions_subcommand: 'init'
+          tf_actions_working_dir: 'aws'
+
+        - name: Terraform validate
+          run: terraform validate
 
 
-      - name: Terraform validate
-        run: terraform validate
+        - name: Terraform Plan
+          run: terraform plan
+
+  azure:
+    runs-on: ubuntu-latest
+
+    steps:
+        - uses: actions/checkout@v3
+        - name: Log in with Azure
+          uses: azure/login@v1
+          with:
+            creds: '${{ secrets.AZURE_CREDENTIALS }}'
+
+        - name: Setup Terraform
+          uses: hashicorp/setup-terraform@v2
+
+        - name: Terraform Init
+            with:
+              tf_actions_subcommand: 'init'
+              tf_actions_working_dir: 'azure'
 
 
-      - name: Terraform Plan
-        run: terraform plan
+        - name: Terraform validate
+          run: terraform validate
+
+
+        - name: Terraform Plan
+          run: terraform plan
